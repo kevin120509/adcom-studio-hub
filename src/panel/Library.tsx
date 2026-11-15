@@ -86,7 +86,15 @@ export default function Library() {
       </PageHead>
 
       <div className="grid gap-5 lg:grid-cols-[260px_1fr]">
-        <aside className="space-y-4">
+        <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 scrollbar-thin lg:hidden">
+          <button onClick={() => setFolder('all')} className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm ${folder === 'all' ? 'border-ink bg-ink text-paper' : 'hairline bg-white/50'}`}><HardDrive className="h-3.5 w-3.5" /> Todo</button>
+          {folders.map((p) => (
+            <button key={p.id} onClick={() => setFolder(p.id)} className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-sm ${folder === p.id ? 'border-ink bg-ink text-paper' : 'hairline bg-white/50'}`}>
+              <Folder className={`h-3.5 w-3.5 ${folder === p.id ? '' : 'text-gold'}`} /> {p.name}
+            </button>
+          ))}
+        </div>
+        <aside className="hidden space-y-4 lg:block">
           <div className={`${card} p-3`}>
             <p className="px-2 pb-2 pt-1 text-xs font-semibold uppercase tracking-wider text-muted">Carpetas de Drive</p>
             <button onClick={() => setFolder('all')} className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-sm ${folder === 'all' ? 'bg-ink text-paper' : 'hover:bg-sand'}`}><HardDrive className="h-4 w-4" /> Todo <span className="ml-auto text-xs opacity-60">{media.length}</span></button>
@@ -107,13 +115,13 @@ export default function Library() {
         </aside>
 
         <section>
-          <div className="mb-4 flex flex-wrap gap-2">
+          <div className="mb-4 flex gap-2 overflow-x-auto pb-1 scrollbar-thin sm:flex-wrap">
             {(['todos', 'foto', 'plano', 'documento', 'video'] as const).map((k) => (
-              <button key={k} onClick={() => setKind(k)} className={`rounded-full border px-3.5 py-1.5 text-sm capitalize ${kind === k ? 'border-ink bg-ink text-paper' : 'hairline bg-white/50 hover:border-ink/40'}`}>{k === 'todos' ? 'Todo' : k + 's'}</button>
+              <button key={k} onClick={() => setKind(k)} className={`shrink-0 rounded-full border px-3.5 py-1.5 text-sm capitalize ${kind === k ? 'border-ink bg-ink text-paper' : 'hairline bg-white/50 hover:border-ink/40'}`}>{k === 'todos' ? 'Todo' : k + 's'}</button>
             ))}
             <span className="mx-1 hidden w-px bg-ink/10 sm:block" />
             {(['todos', 'original', 'en revisión', 'seleccionada'] as const).map((k) => (
-              <button key={k} onClick={() => setStatus(k)} className={`rounded-full border px-3.5 py-1.5 text-sm capitalize ${status === k ? 'border-clay bg-clay text-paper' : 'hairline bg-white/50 hover:border-ink/40'}`}>{k === 'todos' ? 'Cualquier estado' : k}</button>
+              <button key={k} onClick={() => setStatus(k)} className={`shrink-0 rounded-full border px-3.5 py-1.5 text-sm capitalize ${status === k ? 'border-clay bg-clay text-paper' : 'hairline bg-white/50 hover:border-ink/40'}`}>{k === 'todos' ? 'Cualquier estado' : k}</button>
             ))}
           </div>
           <motion.div layout className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">

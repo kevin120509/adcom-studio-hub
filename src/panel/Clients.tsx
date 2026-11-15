@@ -181,9 +181,9 @@ function ClientDetail({ c, projects, onClose, onUpdate, onSchedule, onContact }:
       >
         <p className="text-sm font-semibold">Agendar seguimiento</p>
         <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Ej. Enviar cotización" className={inputCls} />
-        <div className="flex gap-2">
+        <div className="grid grid-cols-[1fr_7.5rem] gap-2">
           <input type="date" value={date} min={TODAY} onChange={(e) => setDate(e.target.value)} className={inputCls} />
-          <input type="time" value={time} onChange={(e) => setTime(e.target.value)} className={`${inputCls} w-32`} />
+          <input type="time" value={time} onChange={(e) => setTime(e.target.value)} className={inputCls} />
         </div>
         <Btn type="submit" disabled={title.trim().length < 3} className="w-full"><CalendarPlus className="h-4 w-4" /> Agendar</Btn>
       </form>

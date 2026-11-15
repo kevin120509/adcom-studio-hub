@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, Check, ExternalLink, FolderOpen, Globe2, Landmark, Lock, Sparkles, Upload, Archive, EyeOff } from 'lucide-react'
 import { Btn, EASE, PlanBadge, inputCls } from '../components/ui'
 import { img, users, type Stage } from '../data/mock'
-import { fmtDate, useStore } from '../store'
+import { can, fmtDate, useMe, useStore } from '../store'
 import { card } from './PanelLayout'
 import { pubBadge } from './Projects'
 import { MediaTile } from './Library'
@@ -21,6 +21,9 @@ export default function ProjectFile() {
 function ProjectFileInner({ id }: { id?: string }) {
   const nav = useNavigate()
   const s = useStore()
+  const me = useMe()
+  const canEdit = can(me.id, 'editar')
+  const canPublish = can(me.id, 'publicarSitio')
   const p = s.projects.find((x) => x.id === id)
   const [tab, setTab] = useState<'resumen' | 'material' | 'contenido'>('resumen')
   const [desc, setDesc] = useState({ i: p?.descInternal ?? '', p: p?.descPublic ?? '', t: p?.tagline ?? '' })
@@ -76,22 +79,22 @@ function ProjectFileInner({ id }: { id?: string }) {
               const cur = stages.indexOf(p.stage)
               const done = i <= cur
               return (
-                <button key={st} onClick={() => { s.updateProject(p.id, { stage: st, progress: Math.max(stageProgress[st], st === p.stage ? p.progress : 0) }); s.log(`movió ${p.name} a etapa ${st}`) }} className="group text-left">
+                <button key={st} disabled={!canEdit} onClick={() => { s.updateProject(p.id, { stage: st, progress: Math.max(stageProgress[st], st === p.stage ? p.progress : 0) }); s.log(`movió ${p.name} a etapa ${st}`) }} className="group min-w-0 text-left disabled:cursor-not-allowed">
                   <div className="h-1.5 overflow-hidden rounded-full bg-sand"><motion.div animate={{ width: done ? '100%' : '0%' }} transition={{ duration: 0.6, ease: EASE }} className="h-full bg-ink" /></div>
-                  <span className={`mt-2 flex items-center gap-1 text-xs font-semibold sm:text-sm ${done ? 'text-ink' : 'text-muted group-hover:text-ink'}`}>{done && <Check className="h-3.5 w-3.5" />}{st}</span>
+                  <span title={st} className={`mt-2 flex min-w-0 items-center gap-1 text-[10px] font-semibold sm:text-sm ${done ? 'text-ink' : 'text-muted group-hover:text-ink'}`}>{done && <Check className="hidden h-3.5 w-3.5 shrink-0 sm:block" />}<span className="truncate">{st}</span></span>
                 </button>
               )
             })}
           </div>
-          <input type="range" min={0} max={100} value={p.progress} onChange={(e) => s.updateProject(p.id, { progress: Number(e.target.value) })} className="mt-5 w-full accent-[#b9562e]" aria-label="Avance" />
+          <input type="range" disabled={!canEdit} min={0} max={100} value={p.progress} onChange={(e) => s.updateProject(p.id, { progress: Number(e.target.value) })} className="mt-5 w-full accent-[#b9562e]" aria-label="Avance" />
         </div>
       </div>
 
       <div className="mt-5 grid gap-5 xl:grid-cols-[1fr_360px]">
         <div>
           <div className="mb-4 flex gap-1 rounded-full border hairline bg-white/50 p-1">
-            {([['resumen', 'Ficha'], ['material', `Material (${media.length})`], ['contenido', `Publicaciones (${posts.length})`]] as const).map(([k, l]) => (
-              <button key={k} onClick={() => setTab(k)} className={`relative flex-1 rounded-full px-3 py-2 text-sm font-medium ${tab === k ? 'text-paper' : 'text-ink/60 hover:text-ink'}`}>
+            {([['resumen', 'Ficha'], ['material', `Material · ${media.length}`], ['contenido', `Posts · ${posts.length}`]] as const).map(([k, l]) => (
+              <button key={k} onClick={() => setTab(k)} className={`relative flex-1 whitespace-nowrap rounded-full px-2 py-2 text-xs font-medium sm:px-3 sm:text-sm ${tab === k ? 'text-paper' : 'text-ink/60 hover:text-ink'}`}>
                 {tab === k && <motion.span layoutId="ptab" className="absolute inset-0 rounded-full bg-ink" transition={{ duration: 0.4, ease: EASE }} />}
                 <span className="relative">{l}</span>
               </button>
@@ -126,7 +129,7 @@ function ProjectFileInner({ id }: { id?: string }) {
                 <Btn variant="light" onClick={() => { setDesc({ ...desc, p: `${p.type === 'Remodelación' ? 'Remodelación' : 'Proyecto'} de ${p.area} m² en ${p.location}. Diseñado por ADCOM para aprovechar la luz y la ventilación natural, con materiales locales y acabados de bajo mantenimiento.`, t: desc.t || 'Diseño que respira con el clima de Yucatán.' }); s.toast('Borrador de descripción listo para revisar', 'info') }}>
                   <Sparkles className="h-4 w-4" /> Sugerir con IA <PlanBadge n={3} />
                 </Btn>
-                <Btn onClick={saveDesc}>Guardar ficha</Btn>
+                <Btn onClick={saveDesc} disabled={!canEdit} title={canEdit ? '' : 'Tu rol no puede editar fichas'}>Guardar ficha</Btn>
               </div>
             </div>
           )}
@@ -165,8 +168,9 @@ function ProjectFileInner({ id }: { id?: string }) {
             <button
               role="switch"
               aria-checked={p.permission}
+              disabled={!canPublish}
               onClick={() => { s.updateProject(p.id, { permission: !p.permission, ...(p.permission && p.publicStatus === 'publicado' ? { publicStatus: 'pendiente' as const } : {}) }); s.toast(p.permission ? 'Permiso retirado: el proyecto sale del sitio' : 'Permiso registrado', p.permission ? 'warn' : 'ok') }}
-              className={`relative h-6 w-11 shrink-0 rounded-full transition ${p.permission ? 'bg-sage' : 'bg-ink/20'}`}
+              className={`relative h-6 w-11 shrink-0 rounded-full transition disabled:cursor-not-allowed disabled:opacity-50 ${p.permission ? 'bg-sage' : 'bg-ink/20'}`}
             >
               <motion.span layout className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow ${p.permission ? 'right-0.5' : 'left-0.5'}`} />
             </button>
@@ -184,16 +188,16 @@ function ProjectFileInner({ id }: { id?: string }) {
           {p.publicStatus === 'publicado' ? (
             <div className="space-y-2">
               <Link to={`/proyectos/${p.slug}`} className="flex w-full items-center justify-center gap-2 rounded-full bg-sage py-2.5 text-sm font-semibold text-paper hover:opacity-90"><ExternalLink className="h-4 w-4" /> Ver en el sitio</Link>
-              <Btn variant="light" className="w-full" onClick={() => s.setPublicStatus(p.id, 'privado')}><EyeOff className="h-4 w-4" /> Ocultar del sitio</Btn>
+              <Btn variant="light" className="w-full" disabled={!canPublish} onClick={() => s.setPublicStatus(p.id, 'privado')}><EyeOff className="h-4 w-4" /> Ocultar del sitio</Btn>
             </div>
           ) : (
             <div className="space-y-2">
-              <Btn variant="clay" className="w-full py-2.5" disabled={!ready} onClick={() => s.setPublicStatus(p.id, 'publicado')}><Globe2 className="h-4 w-4" /> Publicar en el sitio</Btn>
-              {!ready && <p className="text-center text-xs text-muted">Completa la lista de arriba para poder publicar.</p>}
-              {p.publicStatus !== 'pendiente' && <Btn variant="light" className="w-full" onClick={() => s.setPublicStatus(p.id, 'pendiente')}>Marcar pendiente de publicar</Btn>}
+              <Btn variant="clay" className="w-full py-2.5" disabled={!ready || !canPublish} onClick={() => s.setPublicStatus(p.id, 'publicado')}><Globe2 className="h-4 w-4" /> Publicar en el sitio</Btn>
+              {!canPublish ? <p className="text-center text-xs text-muted">Tu rol ({me.role}) no puede publicar en el sitio. Pídelo a Dirección o Contenido.</p> : !ready && <p className="text-center text-xs text-muted">Completa la lista de arriba para poder publicar.</p>}
+              {p.publicStatus !== 'pendiente' && canEdit && <Btn variant="light" className="w-full" onClick={() => s.setPublicStatus(p.id, 'pendiente')}>Marcar pendiente de publicar</Btn>}
             </div>
           )}
-          {p.publicStatus !== 'archivado' && (
+          {p.publicStatus !== 'archivado' && canPublish && (
             <button onClick={() => s.setPublicStatus(p.id, 'archivado')} className="mt-3 flex w-full items-center justify-center gap-2 py-2 text-xs text-muted hover:text-ink"><Archive className="h-3.5 w-3.5" /> Archivar proyecto</button>
           )}
           <p className="mt-4 border-t hairline pt-4 text-xs text-muted">Actualizado {fmtDate(p.updatedAt, { day: 'numeric', month: 'long' })}</p>

@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Check, Facebook, Instagram, Pencil, RotateCcw, Send, Sparkles, ThumbsDown, Wand2, Heart, MessageCircle, Bookmark } from 'lucide-react'
 import { Btn, EASE, Field, Modal, PlanBadge, inputCls } from '../components/ui'
 import { img, TODAY, type Channel, type Post, type PostStatus } from '../data/mock'
-import { fmtDate, useMe, useStore } from '../store'
+import { can, fmtDate, useMe, useStore } from '../store'
 import { card, PageHead } from './PanelLayout'
 
 const cols: { k: PostStatus; l: string; dot: string }[] = [
@@ -14,17 +14,16 @@ const cols: { k: PostStatus; l: string; dot: string }[] = [
   { k: 'publicado', l: 'Publicado', dot: 'bg-clay' },
 ]
 
-const canApprove = (role: string) => role === 'Dirección' || role === 'Contenido y redes'
 
 export function PostCard({ post }: { post: Post }) {
   const { movePost, projects } = useStore()
   const me = useMe()
   const [edit, setEdit] = useState(false)
   const project = projects.find((p) => p.id === post.projectId)
-  const approver = canApprove(me.role)
+  const approver = can(me.id, 'aprobar')
   return (
     <>
-      <motion.article layout layoutId={post.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: EASE }} className="overflow-hidden rounded-xl border hairline bg-white shadow-sm">
+      <motion.article layout initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: EASE }} className="overflow-hidden rounded-xl border hairline bg-white shadow-sm">
         <button onClick={() => setEdit(true)} className="group relative block w-full">
           <img src={img(post.image, 600, 340)} alt="" loading="lazy" className="aspect-[16/9] w-full object-cover" />
           <span className="absolute inset-0 grid place-items-center bg-ink/0 text-paper opacity-0 transition group-hover:bg-ink/35 group-hover:opacity-100"><Pencil className="h-5 w-5" /></span>
@@ -50,11 +49,11 @@ export function PostCard({ post }: { post: Post }) {
                 <Btn className="flex-1 bg-sage py-1.5 text-xs hover:bg-sage/90" disabled={!approver} title={approver ? '' : 'Tu rol no puede aprobar'} onClick={() => movePost(post.id, 'aprobado')}><Check className="h-3.5 w-3.5" /> Aprobar</Btn>
               </>
             )}
-            {post.status === 'aprobado' && <Btn variant="clay" className="w-full py-1.5 text-xs" onClick={() => movePost(post.id, 'publicado')}><Send className="h-3.5 w-3.5" /> Publicar ahora <span className="rounded bg-paper/20 px-1 text-[9px]">PLAN 3</span></Btn>}
+            {post.status === 'aprobado' && <Btn variant="clay" className="w-full py-1.5 text-xs" disabled={!approver} title={approver ? '' : 'Tu rol no puede publicar'} onClick={() => movePost(post.id, 'publicado')}><Send className="h-3.5 w-3.5" /> Publicar ahora <span className="rounded bg-paper/20 px-1 text-[9px]">PLAN 3</span></Btn>}
             {post.status === 'rechazado' && <Btn variant="light" className="w-full py-1.5 text-xs" onClick={() => movePost(post.id, 'borrador')}><RotateCcw className="h-3.5 w-3.5" /> Reabrir como borrador</Btn>}
             {post.status === 'publicado' && <p className="w-full rounded-full bg-clay/10 py-1.5 text-center text-xs font-semibold text-clay">Publicado ✓</p>}
           </div>
-          {post.status === 'revisión' && !approver && <p className="mt-2 text-center text-[11px] text-muted">Solo Dirección o Contenido pueden aprobar.</p>}
+          {(post.status === 'revisión' || post.status === 'aprobado') && !approver && <p className="mt-2 text-center text-[11px] text-muted">Solo Dirección o Contenido pueden aprobar y publicar.</p>}
         </div>
       </motion.article>
       <EditPost post={post} open={edit} onClose={() => setEdit(false)} />
@@ -118,6 +117,7 @@ export default function Content() {
   const [params, setParams] = useSearchParams()
   const [gen, setGen] = useState(params.get('generar') === '1')
   const [showRejected, setShowRejected] = useState(false)
+  const [mcol, setMcol] = useState<PostStatus>('revisión')
   useEffect(() => { if (params.get('generar') === '1') setGen(true) }, [params])
   const rejected = posts.filter((p) => p.status === 'rechazado')
 
@@ -132,10 +132,27 @@ export default function Content() {
         {['Borrador IA', 'Revisión de Abril', 'Aprobado', 'Publicado en redes'].map((s, i) => (
           <span key={s} className="flex items-center gap-2">{i > 0 && <span className="text-ink/30">→</span>}<span className="rounded-full bg-sand px-2.5 py-1">{s}</span></span>
         ))}
-        <span className="ml-auto flex items-center gap-2">Publicación automática en Meta <PlanBadge n={3} /></span>
+        <span className="flex w-full items-center gap-2 sm:ml-auto sm:w-auto">Publicación automática en Meta <PlanBadge n={3} /></span>
       </div>
 
-      <div className="-mx-4 overflow-x-auto px-4 pb-4 scrollbar-thin sm:-mx-6 sm:px-6">
+      {/* Celular: una columna a la vez */}
+      <div className="md:hidden">
+        <div className="mb-3 grid grid-cols-4 gap-1 rounded-2xl border hairline bg-white/50 p-1">
+          {cols.map((c) => (
+            <button key={c.k} onClick={() => setMcol(c.k)} className={`relative rounded-xl px-1 py-2 text-[11px] font-semibold leading-tight ${mcol === c.k ? 'text-paper' : 'text-ink/60'}`}>
+              {mcol === c.k && <motion.span layoutId="mcol" className="absolute inset-0 rounded-xl bg-ink" transition={{ duration: 0.4, ease: EASE }} />}
+              <span className="relative block">{c.l}</span>
+              <span className="relative block opacity-60">{posts.filter((p) => p.status === c.k).length}</span>
+            </button>
+          ))}
+        </div>
+        <div className="space-y-3">
+          <AnimatePresence mode="popLayout">{posts.filter((p) => p.status === mcol).map((p) => <PostCard key={p.id} post={p} />)}</AnimatePresence>
+          {!posts.some((p) => p.status === mcol) && <p className="rounded-xl border border-dashed border-ink/15 py-10 text-center text-sm text-muted">No hay publicaciones aquí.</p>}
+        </div>
+      </div>
+
+      <div className="-mx-4 hidden overflow-x-auto px-4 pb-4 scrollbar-thin sm:-mx-6 sm:px-6 md:block">
         <div className="grid min-w-[1000px] grid-cols-4 gap-4">
           {cols.map((c) => {
             const list = posts.filter((p) => p.status === c.k)

@@ -8,6 +8,7 @@ import { fmtDate, useStore } from '../store'
 import { card, PageHead } from './PanelLayout'
 
 const kindIcon = { Llamada: Phone, 'Visita a obra': HardHat, Reunión: Users2, Seguimiento: Repeat }
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 
 export default function Agenda() {
@@ -47,25 +48,25 @@ export default function Agenda() {
 
       <div className="grid gap-5 xl:grid-cols-[1.3fr_1fr]">
         <section className={`${card} p-4 sm:p-6`}>
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="font-display text-2xl capitalize">{month.toLocaleDateString('es-MX', { month: 'long', year: 'numeric' })}</h2>
-            <div className="flex gap-1">
+          <div className="mb-4 flex items-center justify-between gap-2">
+            <h2 className="min-w-0 truncate font-display text-xl sm:text-2xl">{cap(month.toLocaleDateString('es-MX', { month: 'long', year: 'numeric' }))}</h2>
+            <div className="flex shrink-0 gap-0.5">
               <button onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))} className="rounded-full p-2 hover:bg-sand" aria-label="Mes anterior"><ChevronLeft className="h-5 w-5" /></button>
               <button onClick={() => { setMonth(new Date(2026, 10, 1)); setDay(TODAY) }} className="rounded-full px-3 text-sm font-semibold hover:bg-sand">Hoy</button>
               <button onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))} className="rounded-full p-2 hover:bg-sand" aria-label="Mes siguiente"><ChevronRight className="h-5 w-5" /></button>
             </div>
           </div>
-          <div className="grid grid-cols-7 gap-1 text-center text-[11px] font-semibold uppercase tracking-wider text-muted">
+          <div className="grid grid-cols-7 gap-0.5 text-center text-[10px] sm:gap-1 sm:text-[11px] font-semibold uppercase tracking-wider text-muted">
             {['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map((d) => <span key={d} className="py-2">{d}</span>)}
           </div>
-          <div className="grid grid-cols-7 gap-1">
+          <div className="grid grid-cols-7 gap-0.5 sm:gap-1">
             {days.map((d) => {
               const k = iso(d)
               const items = filtered.filter((a) => a.date === k)
               const inMonth = d.getMonth() === month.getMonth()
               const sel = k === day
               return (
-                <button key={k} onClick={() => setDay(k)} className={`relative flex aspect-square flex-col items-center justify-start rounded-xl p-1 text-sm transition sm:aspect-[1.15] sm:items-start sm:p-2 ${sel ? 'bg-ink text-paper' : k === TODAY ? 'bg-clay/10 font-bold text-clay' : 'hover:bg-sand'} ${inMonth ? '' : 'opacity-35'}`}>
+                <button key={k} onClick={() => setDay(k)} className={`relative flex aspect-square min-w-0 flex-col items-center justify-start rounded-lg p-1 text-xs sm:rounded-xl sm:text-sm transition sm:aspect-[1.15] sm:items-start sm:p-2 ${sel ? 'bg-ink text-paper' : k === TODAY ? 'bg-clay/10 font-bold text-clay' : 'hover:bg-sand'} ${inMonth ? '' : 'opacity-35'}`}>
                   <span>{d.getDate()}</span>
                   <span className="mt-auto flex gap-0.5">
                     {items.slice(0, 3).map((a) => <span key={a.id} className={`h-1.5 w-1.5 rounded-full ${a.done ? 'bg-sage' : sel ? 'bg-paper' : 'bg-clay'}`} />)}
@@ -78,7 +79,7 @@ export default function Agenda() {
 
         <section className="space-y-5">
           <div className={`${card} p-5 sm:p-6`}>
-            <h2 className="mb-4 font-display text-xl capitalize">{day === TODAY ? 'Hoy, ' : ''}{fmtDate(day, { weekday: 'long', day: 'numeric', month: 'long' })}</h2>
+            <h2 className="mb-4 font-display text-xl">{day === TODAY ? 'Hoy, ' + fmtDate(day, { weekday: 'long', day: 'numeric', month: 'long' }) : cap(fmtDate(day, { weekday: 'long', day: 'numeric', month: 'long' }))}</h2>
             <AnimatePresence mode="popLayout">
               {dayItems.map((a) => <Row key={a.id} a={a} client={clients.find((c) => c.id === a.clientId)?.name} onToggle={() => toggleAgenda(a.id)} />)}
             </AnimatePresence>

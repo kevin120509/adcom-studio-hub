@@ -113,6 +113,22 @@ export const users: User[] = [
   { id: 'u4', name: 'Luis Ek', role: 'Fotografía en sitio', permissions: 'Cargar fotografías', initials: 'LE', color: '#b48a3c' },
 ]
 
+export type Perm = 'ver' | 'cargar' | 'editar' | 'aprobar' | 'publicarSitio' | 'config'
+export const permLabels: { k: Perm; l: string }[] = [
+  { k: 'ver', l: 'Ver proyectos' },
+  { k: 'cargar', l: 'Cargar material' },
+  { k: 'editar', l: 'Editar fichas' },
+  { k: 'aprobar', l: 'Aprobar publicaciones' },
+  { k: 'publicarSitio', l: 'Publicar en sitio' },
+  { k: 'config', l: 'Configuración' },
+]
+export const rolePerms: Record<string, Perm[]> = {
+  u1: ['ver', 'cargar', 'editar', 'aprobar', 'publicarSitio', 'config'],
+  u2: ['ver', 'cargar', 'editar', 'aprobar', 'publicarSitio'],
+  u3: ['ver', 'cargar', 'editar'],
+  u4: ['ver', 'cargar'],
+}
+
 export const P = {
   villaPool: '1600585154340-be6161a56a0c',
   living: '1600607687939-ce8a6c25118c',

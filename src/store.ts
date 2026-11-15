@@ -179,6 +179,8 @@ export const useStore = create<State>()(
   ),
 )
 
+export const can = (userId: string, p: D.Perm) => (D.rolePerms[userId] ?? []).includes(p)
+
 export const useMe = () => {
   const id = useStore((s) => s.currentUser)
   return D.users.find((u) => u.id === id) ?? D.users[0]
