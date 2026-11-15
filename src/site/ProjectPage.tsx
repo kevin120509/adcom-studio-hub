@@ -74,7 +74,7 @@ export default function ProjectPage() {
       <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-8">
         <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-6">
           {p.gallery.map((g, i) => (
-            <Reveal key={g + i} delay={i * 0.06} className={i === 0 ? 'col-span-2 md:col-span-4 md:row-span-2' : lastAlone && i === p.gallery.length - 1 ? 'col-span-2' : 'md:col-span-2'}>
+            <Reveal key={g + i} delay={i * 0.06} className={i === 0 ? 'col-span-2 md:col-span-4 md:row-span-2' : lastAlone && i === p.gallery.length - 1 ? 'col-span-2 md:col-span-6' : 'md:col-span-2'}>
               <button onClick={() => setLb(i)} className="group block h-full w-full overflow-hidden rounded-xl bg-sand" aria-label={`Ampliar foto ${i + 1}`}>
                 <img src={img(g, i === 0 ? 1400 : 700)} alt={`${p.name} — foto ${i + 1}`} loading="lazy" className={`w-full object-cover transition duration-700 group-hover:scale-105 ${i === 0 ? 'aspect-[4/3] h-full' : lastAlone && i === p.gallery.length - 1 ? 'aspect-[16/9] md:aspect-[21/9]' : 'aspect-square'}`} />
               </button>
