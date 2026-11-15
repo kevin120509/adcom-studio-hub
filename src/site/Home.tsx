@@ -270,13 +270,15 @@ function Process() {
       <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {steps.map((s, i) => (
           <Reveal key={s.t} delay={(i % 4) * 0.07} className={i === 6 ? 'lg:col-span-1' : ''}>
-            <li className="group relative h-full rounded-2xl border hairline bg-white/40 p-6 transition duration-500 hover:-translate-y-1 hover:bg-white hover:shadow-xl hover:shadow-ink/5">
-              <div className="mb-8 flex items-center justify-between">
+            <li className="group relative flex h-full gap-4 rounded-2xl border hairline bg-white/40 p-5 transition sm:block sm:p-6 duration-500 hover:-translate-y-1 hover:bg-white hover:shadow-xl hover:shadow-ink/5">
+              <div className="flex shrink-0 items-start justify-between sm:mb-8 sm:items-center">
                 <span className="grid h-11 w-11 place-items-center rounded-xl bg-ink text-paper transition duration-500 group-hover:bg-clay"><s.i className="h-5 w-5" /></span>
-                <span className="font-display text-3xl font-light text-ink/15">{String(i + 1).padStart(2, '0')}</span>
+                <span className="absolute right-5 top-4 font-display text-2xl font-light text-ink/15 sm:static sm:text-3xl">{String(i + 1).padStart(2, '0')}</span>
               </div>
+              <div className="min-w-0 pr-8 sm:pr-0">
               <h3 className="font-display text-xl">{s.t}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">{s.d}</p>
+              <p className="mt-1 text-sm leading-relaxed text-muted sm:mt-2">{s.d}</p>
+              </div>
             </li>
           </Reveal>
         ))}

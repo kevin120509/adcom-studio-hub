@@ -170,7 +170,7 @@ export const useStore = create<State>()(
       },
     }),
     {
-      name: 'adcom-studio-hub-demo',
+      name: 'adcom-studio-hub-demo-v2',
       version: 1,
       partialize: (s) => ({
         projects: s.projects, clients: s.clients, media: s.media, posts: s.posts, agenda: s.agenda, activity: s.activity, currentUser: s.currentUser,

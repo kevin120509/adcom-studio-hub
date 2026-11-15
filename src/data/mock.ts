@@ -154,6 +154,8 @@ export const P = {
   bedroom: '1631679706909-1844bbd07221',
   kitchen: '1556909114-f6e7ad7d3136',
   glass: '1496307653780-42ee777d4833',
+  casona: '1685461661138-bf506d38b89b',
+  casonaFacade: '1613859638331-39168fcc2492',
 }
 
 export const services = [
@@ -179,7 +181,7 @@ export const services = [
     key: 'Casonas',
     title: 'Remodelación de casonas',
     text: 'Restauración de casonas del Centro Histórico con gestión de permisos ante el INAH y respeto al patrimonio.',
-    photo: P.hotel,
+    photo: P.casonaFacade,
   },
 ]
 
@@ -199,7 +201,7 @@ export const projects: Project[] = [
     id: 'p1', slug: 'casona-calle-60', name: 'Casona Calle 60', clientId: 'c4', type: 'Remodelación',
     services: ['Casonas', 'Arquitectura'], location: 'Centro Histórico, Mérida', stage: 'Permisos', owner: 'Arq. Daniel Herrera',
     progress: 35, publicStatus: 'publicado', permission: true, inah: true,
-    cover: P.hotel, gallery: [P.hotel, P.living2, P.bedroom, P.interior3], year: 2026, area: 640,
+    cover: P.casona, gallery: [P.casona, P.casonaFacade, P.living2, P.bedroom], year: 2026, area: 640,
     tagline: 'Una casona de 1890 que vuelve a recibir huéspedes.',
     descInternal: 'Expediente INAH en integración. Falta dictamen estructural del muro norte.',
     descPublic: 'Restauración integral de una casona de finales del siglo XIX para convertirla en hotel boutique de 9 habitaciones. Se conservan muros de mampostería, pasta original y vigas de madera, integrando instalaciones contemporáneas de forma discreta.',
@@ -295,7 +297,7 @@ export const media: Media[] = [
   m('m2', 'p2', 'Estancia_avance.jpg', P.living, 'foto', 'en revisión', 'Ing. Sofía Canul', '2026-11-12', '3.8 MB'),
   m('m3', 'p2', 'Cocina_muebles.jpg', P.kitchenOpen, 'foto', 'original', 'Luis Ek', '2026-11-11', '5.1 MB'),
   m('m4', 'p2', 'Planta_arquitectonica_v3.pdf', P.blueprint, 'plano', 'seleccionada', 'Arq. Daniel Herrera', '2026-10-02', '1.4 MB'),
-  m('m5', 'p1', 'Patio_central_levantamiento.jpg', P.hotel, 'foto', 'seleccionada', 'Luis Ek', '2026-11-09', '6.0 MB'),
+  m('m5', 'p1', 'Patio_central_levantamiento.jpg', P.casona, 'foto', 'seleccionada', 'Luis Ek', '2026-11-09', '6.0 MB'),
   m('m6', 'p1', 'Expediente_INAH_borrador.pdf', P.blueprint, 'documento', 'en revisión', 'Arq. Daniel Herrera', '2026-11-13', '8.7 MB'),
   m('m7', 'p1', 'Recorrido_casona.mp4', P.living2, 'video', 'original', 'Luis Ek', '2026-11-09', '212 MB'),
   m('m8', 'p3', 'Moodboard_acabados.jpg', P.chair, 'foto', 'en revisión', 'Abril Navarro', '2026-11-10', '2.2 MB'),
@@ -320,7 +322,7 @@ export const posts: Post[] = [
     hashtags: ['#CasaYucateca', '#DiseñoArquitectónico', '#Mérida'],
   },
   {
-    id: 'po3', projectId: 'p1', title: 'Casona Calle 60 · Levantamiento', status: 'borrador', channel: 'Facebook', image: P.hotel, date: '2026-11-13', aiGenerated: true,
+    id: 'po3', projectId: 'p1', title: 'Casona Calle 60 · Levantamiento', status: 'borrador', channel: 'Facebook', image: P.casona, date: '2026-11-13', aiGenerated: true,
     body: 'Iniciamos el levantamiento de una casona de 1890 en el Centro Histórico. Cada muro cuenta una historia que vamos a conservar.',
     hashtags: ['#CasonasMérida', '#Patrimonio', '#CentroHistórico'],
   },
