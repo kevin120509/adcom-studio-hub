@@ -44,7 +44,7 @@ export default function PanelLayout() {
 
   const Side = (
     <div className="flex h-full flex-col">
-      <div className="flex items-center justify-between px-5 py-5">
+      <div className="flex items-center justify-between gap-2 py-5 pl-5 pr-14 lg:pr-5">
         <Link to="/panel"><Logo small /></Link>
         <span className="rounded-md bg-ink px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-paper">Studio Hub</span>
       </div>
