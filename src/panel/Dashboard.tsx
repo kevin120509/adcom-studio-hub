@@ -62,7 +62,7 @@ export default function Dashboard() {
             <span className="text-xs text-muted">{todos.length} por atender</span>
           </div>
           {todos.length ? (
-            <ul className="divide-y hairline">
+            <ul className="divide-y divide-ink/10">
               {todos.map((t) => (
                 <li key={t.k}>
                   <Link to={t.to} className="group flex items-center gap-3 py-3 text-sm">

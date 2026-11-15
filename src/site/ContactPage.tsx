@@ -33,6 +33,7 @@ export default function ContactPage() {
     setTimeout(() => {
       submitLead(f)
       setState('done')
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }, 1200)
   }
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

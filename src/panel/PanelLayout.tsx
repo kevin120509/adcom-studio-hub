@@ -118,7 +118,7 @@ export default function PanelLayout() {
             </AnimatePresence>
           </div>
           <div className="ml-auto flex items-center gap-2">
-            <span className="hidden text-xs text-muted md:block">Viernes 14 de noviembre</span>
+            <span className="hidden text-xs text-muted md:block">Sábado 14 de noviembre</span>
             <div className="relative">
               <button onClick={() => setBell((b) => !b)} className="relative rounded-full p-2.5 hover:bg-sand" aria-label="Notificaciones">
                 <Bell className="h-5 w-5" />

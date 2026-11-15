@@ -40,7 +40,7 @@ function Hero({ ready }: { ready: boolean }) {
           transition={{ duration: 2.2, ease: EASE }}
         />
       </motion.div>
-      <div className="absolute inset-0 bg-gradient-to-b from-ink/60 via-ink/20 to-ink/85" />
+      <div className="absolute inset-0 bg-gradient-to-b from-ink/65 via-ink/40 to-ink/90" />
 
       <motion.div style={{ opacity: fade }} className="relative mx-auto flex h-full max-w-7xl flex-col justify-end px-4 pb-14 sm:px-8 sm:pb-20">
         {ready && (
@@ -269,7 +269,7 @@ function Process() {
       </div>
       <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {steps.map((s, i) => (
-          <Reveal key={s.t} delay={i * 0.07} className={i === 6 ? 'lg:col-span-1' : ''}>
+          <Reveal key={s.t} delay={(i % 4) * 0.07} className={i === 6 ? 'lg:col-span-1' : ''}>
             <li className="group relative h-full rounded-2xl border hairline bg-white/40 p-6 transition duration-500 hover:-translate-y-1 hover:bg-white hover:shadow-xl hover:shadow-ink/5">
               <div className="mb-8 flex items-center justify-between">
                 <span className="grid h-11 w-11 place-items-center rounded-xl bg-ink text-paper transition duration-500 group-hover:bg-clay"><s.i className="h-5 w-5" /></span>
@@ -280,7 +280,7 @@ function Process() {
             </li>
           </Reveal>
         ))}
-        <Reveal delay={0.5}>
+        <Reveal delay={0.2}>
           <li className="flex h-full flex-col justify-between rounded-2xl bg-clay p-6 text-paper">
             <p className="font-display text-2xl font-light leading-snug">Menos tiempo en Canva. Más proyectos publicados.</p>
             <p className="mt-6 text-sm text-paper/75">Flujo propuesto por CODIA</p>

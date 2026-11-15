@@ -53,7 +53,7 @@ export default function Plans() {
       <div className="mt-8 grid gap-5 xl:grid-cols-2">
         <section className={`${card} p-5 sm:p-6`}>
           <h2 className="mb-4 font-display text-xl">¿Qué incluye cada pantalla de esta demo?</h2>
-          <ul className="divide-y hairline">
+          <ul className="divide-y divide-ink/10">
             {map.map((x) => (
               <li key={x.m}>
                 <Link to={x.to} className="group flex items-center gap-3 py-3 text-sm">

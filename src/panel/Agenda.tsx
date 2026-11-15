@@ -91,7 +91,7 @@ export default function Agenda() {
           </div>
           <div className={`${card} p-5 sm:p-6`}>
             <h2 className="mb-3 font-display text-xl">Próximos</h2>
-            <ul className="divide-y hairline">
+            <ul className="divide-y divide-ink/10">
               {upcoming.map((a) => (
                 <li key={a.id} className="flex items-center gap-3 py-2.5 text-sm">
                   <span className="w-14 shrink-0 text-xs font-semibold text-muted">{fmtDate(a.date)}</span>

@@ -52,7 +52,7 @@ export function Loader({ onDone }: { onDone: () => void }) {
             ADCOM
           </motion.h1>
         </div>
-        <div className="mt-4 flex h-6 overflow-hidden text-sm text-paper/60">
+        <div className="mt-6 flex h-6 overflow-hidden text-sm text-paper/60">
           <motion.div animate={{ y: ['0%', '-25%', '-50%', '-75%'] }} transition={{ duration: 2.1, times: [0, 0.33, 0.66, 1], ease: 'easeInOut' }} className="flex flex-col">
             {words.map((w) => <span key={w} className="h-6 leading-6">{w}</span>)}
           </motion.div>

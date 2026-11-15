@@ -53,7 +53,7 @@ export default function ProjectPage() {
 
       <section className="mx-auto grid max-w-7xl gap-14 px-4 py-20 sm:px-8 lg:grid-cols-[1fr_2fr] lg:py-28">
         <Reveal>
-          <dl className="divide-y hairline border-y hairline">
+          <dl className="divide-y divide-ink/10 border-y hairline">
             {specs.map(([k, v]) => (
               <div key={k} className="flex justify-between gap-4 py-4 text-sm">
                 <dt className="text-muted">{k}</dt>

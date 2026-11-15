@@ -61,7 +61,7 @@ export default function Clients() {
         <div className="hidden grid-cols-[1.4fr_1fr_1.4fr_0.8fr_0.7fr] gap-4 border-b hairline px-5 py-3 text-xs font-semibold uppercase tracking-wider text-muted lg:grid">
           <span>Cliente</span><span>Tipo</span><span>Siguiente acción</span><span>Responsable</span><span>Estado</span>
         </div>
-        <ul className="divide-y hairline">
+        <ul className="divide-y divide-ink/10">
           <AnimatePresence initial={false}>
             {list.map((c) => (
               <motion.li key={c.id} layout initial={{ opacity: 0, backgroundColor: '#f1dccf' }} animate={{ opacity: 1, backgroundColor: 'rgba(0,0,0,0)' }} transition={{ duration: 1.2 }}>
