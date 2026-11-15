@@ -36,13 +36,25 @@ export default function SiteLayout({ ready }: { ready: boolean }) {
     return () => { cancelAnimationFrame(id); lenis.destroy() }
   }, [])
 
+  const goHash = (h: string) => {
+    const el = document.getElementById(h.replace('#', ''))
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 70, behavior: 'smooth' })
+  }
+
   useEffect(() => {
     setOpen(false)
-    if (hash) {
-      const t = setTimeout(() => document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'smooth' }), 80)
+    if (hash && ready) {
+      const t = setTimeout(() => goHash(hash), 120)
       return () => clearTimeout(t)
     }
-  }, [pathname, hash])
+  }, [pathname, hash, ready])
+
+  // tocar un enlace de sección cuando ya estás en ella también debe desplazar
+  const onNav = (to: string) => {
+    setOpen(false)
+    const i = to.indexOf('#')
+    if (i >= 0 && pathname === '/' && hash === to.slice(i)) goHash(to.slice(i))
+  }
 
   return (
     <>
@@ -59,6 +71,7 @@ export default function SiteLayout({ ready }: { ready: boolean }) {
                 key={n.label}
                 to={n.to}
                 end={n.end}
+                onClick={() => onNav(n.to)}
                 className={({ isActive }) =>
                   `relative rounded-full px-4 py-2 text-sm font-medium transition ${overHero ? 'text-paper/85 hover:text-paper' : 'text-ink/70 hover:text-ink'} ${isActive && !n.to.includes('#') ? (overHero ? 'text-paper' : 'text-ink') : ''}`
                 }
@@ -82,7 +95,7 @@ export default function SiteLayout({ ready }: { ready: boolean }) {
               <div className="flex flex-col gap-1 px-4 pb-6">
                 {nav.map((n, i) => (
                   <motion.div key={n.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 * i }}>
-                    <Link to={n.to} className="block border-b hairline py-3 font-display text-2xl">{n.label}</Link>
+                    <Link to={n.to} onClick={() => onNav(n.to)} className="block border-b hairline py-3 font-display text-2xl">{n.label}</Link>
                   </motion.div>
                 ))}
                 <Link to="/contacto" className="mt-4 rounded-full bg-ink py-3 text-center text-sm font-semibold text-paper">Cotizar proyecto</Link>
