@@ -49,7 +49,7 @@ export default function Agenda() {
       <div className="grid gap-5 xl:grid-cols-[1.3fr_1fr]">
         <section className={`${card} p-4 sm:p-6`}>
           <div className="mb-4 flex items-center justify-between gap-2">
-            <h2 className="min-w-0 truncate font-display text-xl sm:text-2xl">{cap(month.toLocaleDateString('es-MX', { month: 'long', year: 'numeric' }))}</h2>
+            <h2 className="min-w-0 truncate font-display text-xl sm:text-2xl">{cap(month.toLocaleDateString('es-MX', { month: 'long' }))} {month.getFullYear()}</h2>
             <div className="flex shrink-0 gap-0.5">
               <button onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() - 1, 1))} className="rounded-full p-2 hover:bg-sand" aria-label="Mes anterior"><ChevronLeft className="h-5 w-5" /></button>
               <button onClick={() => { setMonth(new Date(2026, 10, 1)); setDay(TODAY) }} className="rounded-full px-3 text-sm font-semibold hover:bg-sand">Hoy</button>
