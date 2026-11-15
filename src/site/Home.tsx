@@ -155,7 +155,7 @@ function Services() {
               animate={{ opacity: 1, scale: 1, rotate: 0 }}
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.4, ease: EASE }}
-              className="absolute -translate-x-1/2 -translate-y-1/2 h-[190px] w-[260px] rounded-xl object-cover shadow-2xl"
+              className="absolute h-[190px] w-[260px] max-w-none -translate-x-1/2 -translate-y-1/2 rounded-xl object-cover shadow-2xl"
             />
           )}
         </AnimatePresence>
