@@ -165,7 +165,7 @@ export default function SiteLayout({ ready }: { ready: boolean }) {
             <div>
               <h4 className="mb-4 text-xs uppercase tracking-[0.25em] text-paper/40">Equipo ADCOM</h4>
               <Link to="/panel/entrar" className="inline-flex items-center gap-1.5 rounded-full border border-paper/20 px-4 py-2 text-sm hover:bg-paper hover:text-ink">
-                Entrar a Studio Hub <ArrowUpRight className="h-4 w-4" />
+                Acceso para el equipo <ArrowUpRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
@@ -174,7 +174,7 @@ export default function SiteLayout({ ready }: { ready: boolean }) {
           </div>
           <div className="mt-6 flex flex-col justify-between gap-2 border-t border-paper/10 pt-6 text-xs text-paper/40 sm:flex-row">
             <span>© 2026 Grupo ADCOM · Demo con información ficticia</span>
-            <span>Propuesta diseñada por CODIA Software</span>
+            <span>Diseño y desarrollo: CODIA Software</span>
           </div>
         </div>
       </footer>

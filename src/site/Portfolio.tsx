@@ -100,7 +100,7 @@ export default function Portfolio() {
         {list.length === 0 && (
           <div className="rounded-2xl border border-dashed hairline py-20 text-center">
             <p className="font-display text-2xl">Aún no hay proyectos publicados en esta categoría.</p>
-            <p className="mt-2 text-sm text-muted">Se publican desde el panel interno cuando el cliente lo autoriza.</p>
+            <p className="mt-2 text-sm text-muted">Muy pronto compartiremos proyectos de esta categoría.</p>
           </div>
         )}
       </section>

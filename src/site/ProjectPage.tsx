@@ -20,8 +20,8 @@ export default function ProjectPage() {
   if (!p) {
     return (
       <div className="mx-auto max-w-3xl px-4 pb-32 pt-44 text-center">
-        <p className="font-display text-4xl">Este proyecto no está publicado.</p>
-        <p className="mt-3 text-muted">Puede que se haya ocultado desde el panel interno.</p>
+        <p className="font-display text-4xl">Este proyecto no está disponible.</p>
+        <p className="mt-3 text-muted">Puede que ya no esté disponible. Conoce el resto de nuestro trabajo.</p>
         <Link to="/proyectos" className="mt-8 inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-paper"><ArrowLeft className="h-4 w-4" /> Volver al portafolio</Link>
       </div>
     )

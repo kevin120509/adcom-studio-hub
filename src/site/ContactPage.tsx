@@ -109,17 +109,18 @@ export default function ContactPage() {
                   <h2 className="font-display text-3xl">¡Gracias, {f.name.split(' ')[0]}!</h2>
                   <p className="mx-auto mt-3 max-w-sm text-muted">Recibimos tu solicitud. Te contactaremos pronto para platicar tu proyecto.</p>
                   <div className="mx-auto mt-8 max-w-sm rounded-2xl bg-sand/70 p-5 text-left text-sm">
-                    <p className="font-semibold">Lo que pasó por dentro:</p>
+                    <p className="font-semibold">¿Qué sigue?</p>
                     <ul className="mt-2 space-y-1 text-muted">
-                      <li>• Se creó un prospecto en Clientes</li>
-                      <li>• Se agendó una llamada para mañana</li>
-                      <li>• Se avisó a Abril en el panel</li>
+                      <li>• Te llamamos en menos de 24 horas hábiles</li>
+                      <li>• Agendamos una primera plática sin costo</li>
+                      <li>• Si hace falta, visitamos tu terreno o casona</li>
                     </ul>
                   </div>
                   <div className="mt-8 flex flex-wrap justify-center gap-3">
-                    <Link to="/panel/clientes" className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-paper hover:bg-clay">Verlo en el panel <ArrowRight className="h-4 w-4" /></Link>
+                    <Link to="/proyectos" className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-paper hover:bg-clay">Ver proyectos <ArrowRight className="h-4 w-4" /></Link>
                     <button onClick={() => { setState('idle'); setF({ name: '', email: '', phone: '', service: '', message: '' }) }} className="rounded-full border hairline px-6 py-3 text-sm font-semibold hover:bg-white">Enviar otra</button>
                   </div>
+                  <p className="mt-6 text-xs text-muted">Demo: la solicitud ya aparece en <Link to="/panel/clientes" className="font-semibold text-clay underline-offset-2 hover:underline">Clientes del panel</Link>.</p>
                 </motion.div>
               )}
             </AnimatePresence>

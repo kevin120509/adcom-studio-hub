@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AnimatePresence, motion, useMotionValue, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion'
-import { ArrowDown, ArrowRight, ArrowUpRight, Camera, CheckCheck, FolderOpen, Globe, Sparkles, Share2, ClipboardList, Quote } from 'lucide-react'
+import { ArrowDown, ArrowRight, ArrowUpRight, Camera, CheckCheck, ClipboardList, FileCheck2, FolderOpen, Globe, HardHat, KeyRound, MapPin, MessagesSquare, PencilRuler, Quote, Share2, Sparkles } from 'lucide-react'
 import { Counter, EASE, Reveal, SplitText } from '../components/ui'
 import HeroSlides from '../components/HeroSlides'
 import { img, P, services } from '../data/mock'
@@ -245,31 +245,31 @@ function Numbers() {
 
 function Process() {
   const steps = [
-    { i: Camera, t: 'Fotografía en obra', d: 'El equipo sube fotos y planos desde el celular.' },
-    { i: FolderOpen, t: 'Drive por proyecto', d: 'Los originales se guardan ordenados, nunca en un teléfono.' },
-    { i: ClipboardList, t: 'Ficha en Studio Hub', d: 'Cliente, etapa, responsable y permiso de publicación.' },
-    { i: Sparkles, t: 'Borrador con IA', d: 'Título, texto y hashtags listos para revisar.' },
-    { i: CheckCheck, t: 'Aprobación humana', d: 'Nada se publica sin que alguien de ADCOM lo apruebe.' },
-    { i: Globe, t: 'Portafolio web', d: 'El proyecto aparece en este sitio automáticamente.' },
-    { i: Share2, t: 'Facebook e Instagram', d: 'Publicación multicanal, sujeta a permisos de Meta.' },
+    { i: MessagesSquare, t: 'Primera plática', d: 'Escuchamos qué necesitas, cómo vives o trabajas el espacio y tu presupuesto.' },
+    { i: MapPin, t: 'Visita y levantamiento', d: 'Medimos el terreno o la casona y revisamos su estado y orientación.' },
+    { i: PencilRuler, t: 'Anteproyecto y presupuesto', d: 'Te presentamos la propuesta, renders y un presupuesto claro por etapas.' },
+    { i: FileCheck2, t: 'Proyecto y permisos', d: 'Proyecto ejecutivo y trámites, incluida la gestión ante el INAH cuando aplica.' },
+    { i: HardHat, t: 'Obra con residente', d: 'Un residente de ADCOM en sitio y bitácora de cada avance.' },
+    { i: Camera, t: 'Avances cada semana', d: 'Recibes fotos y reporte del progreso sin tener que preguntar.' },
+    { i: KeyRound, t: 'Entrega y garantía', d: 'Recorrido final, entrega de llaves y acompañamiento después de la obra.' },
   ]
   return (
     <section id="proceso" className="mx-auto max-w-7xl px-4 py-24 sm:px-8 sm:py-32">
       <div className="mb-16 grid gap-6 lg:grid-cols-2 lg:items-end">
         <div>
-          <p className="mb-4 text-xs uppercase tracking-[0.3em] text-clay">ADCOM Studio Hub</p>
-          <SplitText text="De la obra al portafolio, sin perder una sola foto." className="font-display text-4xl font-light leading-tight sm:text-6xl" />
+          <p className="mb-4 text-xs uppercase tracking-[0.3em] text-clay">Cómo trabajamos</p>
+          <SplitText text="Tu proyecto, paso a paso y sin sorpresas." className="font-display text-4xl font-light leading-tight sm:text-6xl" />
         </div>
         <Reveal>
-          <p className="text-muted lg:max-w-md lg:justify-self-end">Detrás de este sitio hay un sistema interno que organiza proyectos, material y publicaciones. Así se ve el flujo completo:</p>
-          <Link to="/panel" className="mt-6 inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-paper transition hover:bg-clay">
-            Ver el panel por dentro <ArrowRight className="h-4 w-4" />
+          <p className="text-muted lg:max-w-md lg:justify-self-end">Desde la primera plática hasta la entrega sabes en qué etapa va tu proyecto, quién lo atiende y qué sigue.</p>
+          <Link to="/contacto" className="mt-6 inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-paper transition hover:bg-clay">
+            Agendar una primera plática <ArrowRight className="h-4 w-4" />
           </Link>
         </Reveal>
       </div>
       <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {steps.map((s, i) => (
-          <Reveal key={s.t} delay={(i % 4) * 0.07} className={i === 6 ? 'lg:col-span-1' : ''}>
+          <Reveal key={s.t} delay={(i % 4) * 0.07}>
             <li className="group relative flex h-full gap-4 rounded-2xl border hairline bg-white/40 p-5 transition sm:block sm:p-6 duration-500 hover:-translate-y-1 hover:bg-white hover:shadow-xl hover:shadow-ink/5">
               <div className="flex shrink-0 items-start justify-between sm:mb-8 sm:items-center">
                 <span className="grid h-11 w-11 place-items-center rounded-xl bg-ink text-paper transition duration-500 group-hover:bg-clay"><s.i className="h-5 w-5" /></span>
@@ -283,9 +283,11 @@ function Process() {
           </Reveal>
         ))}
         <Reveal delay={0.2}>
-          <li className="flex h-full flex-col justify-between rounded-2xl bg-clay p-6 text-paper">
-            <p className="font-display text-2xl font-light leading-snug">Menos tiempo en Canva. Más proyectos publicados.</p>
-            <p className="mt-6 text-sm text-paper/75">Flujo propuesto por CODIA</p>
+          <li className="h-full">
+            <Link to="/contacto" className="group flex h-full flex-col justify-between rounded-2xl bg-clay p-6 text-paper transition duration-500 hover:bg-clay-dark">
+              <p className="font-display text-2xl font-light leading-snug">¿Listo para empezar? La primera plática no tiene costo.</p>
+              <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold">Contáctanos <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></span>
+            </Link>
           </li>
         </Reveal>
       </ol>
