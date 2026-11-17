@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowLeft, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Landmark, X } from 'lucide-react'
 import { EASE, Reveal, SplitText } from '../components/ui'
+import HeroSlides from '../components/HeroSlides'
 import { img, services } from '../data/mock'
 import { useStore } from '../store'
 
@@ -39,9 +40,15 @@ export default function ProjectPage() {
   return (
     <article>
       <div ref={ref} className="relative -mt-9 h-[92svh] min-h-[560px] overflow-hidden bg-ink">
-        <motion.img style={{ y }} initial={{ scale: 1.2 }} animate={{ scale: 1.05 }} transition={{ duration: 1.8, ease: EASE }} src={img(p.cover, 2200)} alt={p.name} className="h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-ink/40" />
-        <div className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-4 pb-12 text-paper sm:px-8 sm:pb-16">
+        <HeroSlides
+          key={p.id}
+          slides={p.gallery.map((g, k) => ({ photo: g, title: `${p.name}`, sub: `Foto ${k + 1} de ${p.gallery.length}` }))}
+          interval={5000}
+          captions={false}
+          imageStyle={{ y }}
+          overlayClass="bg-gradient-to-t from-ink/85 via-ink/20 to-ink/40"
+        />
+        <div className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-4 pb-20 text-paper sm:px-8 sm:pb-24">
           <Link to="/proyectos" className="mb-8 inline-flex items-center gap-2 text-sm text-paper/70 hover:text-paper"><ArrowLeft className="h-4 w-4" /> Portafolio</Link>
           <div className="mb-4 flex flex-wrap gap-2">
             {p.services.map((s) => <span key={s} className="rounded-full bg-paper/15 px-3 py-1 text-xs backdrop-blur">{services.find((x) => x.key === s)?.title ?? s}</span>)}

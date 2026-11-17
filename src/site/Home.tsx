@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { AnimatePresence, motion, useMotionValue, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion'
 import { ArrowDown, ArrowRight, ArrowUpRight, Camera, CheckCheck, FolderOpen, Globe, Sparkles, Share2, ClipboardList, Quote } from 'lucide-react'
 import { Counter, EASE, Reveal, SplitText } from '../components/ui'
+import HeroSlides from '../components/HeroSlides'
 import { img, P, services } from '../data/mock'
 import { useStore } from '../store'
 
@@ -28,21 +29,23 @@ function Hero({ ready }: { ready: boolean }) {
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '25%'])
   const scale = useTransform(scrollYProgress, [0, 1], [1.05, 1.2])
   const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0])
+  const published = useStore((s) => s.projects).filter((p) => p.publicStatus === 'publicado')
+  const slides = [
+    { photo: P.luxuryPool, title: 'ADCOM', sub: 'Arquitectura en Mérida' },
+    ...published.slice(0, 5).map((p) => ({ photo: p.cover, title: p.name, sub: p.location.split(',')[0], to: `/proyectos/${p.slug}` })),
+  ]
   return (
     <section ref={ref} className="relative -mt-9 h-[100svh] min-h-[640px] overflow-hidden bg-ink text-paper">
-      <motion.div style={{ y, scale }} className="absolute inset-0">
-        <motion.img
-          src={img(P.luxuryPool, 2200)}
-          alt="Residencia contemporánea con alberca"
-          className="h-full w-full object-cover"
-          initial={{ scale: 1.25, filter: 'brightness(0.4)' }}
-          animate={ready ? { scale: 1, filter: 'brightness(1)' } : {}}
-          transition={{ duration: 2.2, ease: EASE }}
-        />
-      </motion.div>
-      <div className="absolute inset-0 bg-gradient-to-b from-ink/65 via-ink/40 to-ink/90" />
+      <HeroSlides
+        slides={slides}
+        running={ready}
+        interval={6500}
+        intro
+        imageStyle={{ y, scale }}
+        overlayClass="bg-gradient-to-b from-ink/65 via-ink/40 to-ink/90"
+      />
 
-      <motion.div style={{ opacity: fade }} className="relative mx-auto flex h-full max-w-7xl flex-col justify-end px-4 pb-14 sm:px-8 sm:pb-20">
+      <motion.div style={{ opacity: fade }} className="relative mx-auto flex h-full max-w-7xl flex-col justify-end px-4 pb-20 sm:px-8 sm:pb-24">
         {ready && (
           <>
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3, ease: EASE }} className="mb-6 flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-paper/70">
@@ -64,9 +67,6 @@ function Hero({ ready }: { ready: boolean }) {
             </div>
           </>
         )}
-      </motion.div>
-      <motion.div initial={{ opacity: 0 }} animate={ready ? { opacity: 1 } : {}} transition={{ delay: 1.6 }} className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-paper/60 lg:flex">
-        <ArrowDown className="h-3.5 w-3.5 animate-bounce" /> Desliza
       </motion.div>
     </section>
   )

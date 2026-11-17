@@ -21,7 +21,8 @@ import Plans from './panel/Plans'
 
 function ScrollTop() {
   const { pathname } = useLocation()
-  useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  // el sitio público hace su propio scroll al cambiar de página (con transición)
+  useEffect(() => { if (pathname.startsWith('/panel')) window.scrollTo(0, 0) }, [pathname])
   return null
 }
 

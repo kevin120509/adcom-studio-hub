@@ -3,6 +3,8 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, CheckCircle2, Loader2, MapPin, MessageCircle, Phone } from 'lucide-react'
 import { EASE, Field, Reveal, SplitText, inputCls } from '../components/ui'
+import HeroSlides from '../components/HeroSlides'
+import { smoothTo } from './SiteLayout'
 import { img, P } from '../data/mock'
 import { useStore } from '../store'
 
@@ -33,7 +35,8 @@ export default function ContactPage() {
     setTimeout(() => {
       submitLead(f)
       setState('done')
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      const card = document.getElementById('form-card')
+      if (card) smoothTo(card, -120)
     }, 1200)
   }
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -42,13 +45,28 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="pt-32 sm:pt-40">
-      <section className="mx-auto grid max-w-7xl gap-14 px-4 pb-28 sm:px-8 lg:grid-cols-[1fr_1.1fr]">
+    <div>
+      <section className="relative -mt-9 h-[64svh] min-h-[460px] overflow-hidden bg-ink text-paper">
+        <HeroSlides
+          slides={[
+            { photo: P.blueprint, title: 'Diseño', sub: 'Del primer trazo al proyecto ejecutivo' },
+            { photo: P.site, title: 'Obra', sub: 'Residente y bitácora semanal' },
+            { photo: P.casona, title: 'Casonas', sub: 'Restauración con gestión INAH' },
+            { photo: P.villaPool, title: 'Entrega', sub: 'Llave en mano' },
+          ]}
+          interval={5000}
+          overlayClass="bg-gradient-to-b from-ink/60 via-ink/35 to-ink/85"
+        />
+        <div className="relative mx-auto flex h-full max-w-7xl flex-col justify-end px-4 pb-20 sm:px-8 sm:pb-24">
+          <p className="mb-5 flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-paper/70"><span className="h-px w-10 bg-clay" /> Contacto</p>
+          <SplitText as="h1" text="Cuéntanos qué quieres construir." className="max-w-3xl font-display text-5xl font-light leading-[1.02] tracking-tight sm:text-7xl" />
+        </div>
+      </section>
+
+      <section className="mx-auto grid max-w-7xl gap-14 px-4 pb-28 pt-16 sm:px-8 sm:pt-20 lg:grid-cols-[1fr_1.1fr]">
         <div>
-          <p className="mb-5 text-xs uppercase tracking-[0.3em] text-muted">Contacto</p>
-          <SplitText as="h1" text="Cuéntanos qué quieres construir." className="font-display text-5xl font-light leading-[1.02] tracking-tight sm:text-7xl" />
-          <Reveal delay={0.2}>
-            <p className="mt-6 max-w-md text-muted">Respondemos en menos de 24 horas hábiles. Tu solicitud llega directo a la agenda del equipo.</p>
+          <Reveal delay={0.1}>
+            <p className="max-w-md text-lg text-muted">Respondemos en menos de 24 horas hábiles. Tu solicitud llega directo a la agenda del equipo.</p>
             <ul className="mt-10 space-y-4 text-sm">
               <li className="flex items-center gap-3"><span className="grid h-10 w-10 place-items-center rounded-full bg-sand"><MessageCircle className="h-4 w-4" /></span> WhatsApp 999 000 0000 <span className="text-muted">(ficticio)</span></li>
               <li className="flex items-center gap-3"><span className="grid h-10 w-10 place-items-center rounded-full bg-sand"><Phone className="h-4 w-4" /></span> hola@adcom-demo.mx</li>
@@ -59,7 +77,7 @@ export default function ContactPage() {
         </div>
 
         <Reveal delay={0.1}>
-          <div className="relative overflow-hidden rounded-3xl border hairline bg-white/50 p-6 sm:p-10">
+          <div id="form-card" className="relative overflow-hidden rounded-3xl border hairline bg-white/50 p-6 sm:p-10">
             <AnimatePresence mode="wait">
               {state !== 'done' ? (
                 <motion.form key="form" onSubmit={send} noValidate exit={{ opacity: 0, y: -20 }} className="space-y-5">

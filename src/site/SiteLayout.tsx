@@ -1,9 +1,25 @@
-import { useEffect, useState } from 'react'
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { Link, NavLink, useLocation, useOutlet } from 'react-router-dom'
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import Lenis from 'lenis'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
 import { EASE, Logo } from '../components/ui'
+
+// Instancia compartida del scroll suave (Lenis) para desplazamientos programados
+let lenisRef: Lenis | null = null
+const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
+
+export function smoothTo(target: number | HTMLElement, offset = -80) {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (lenisRef && !reduce) {
+    const dist = Math.abs((typeof target === 'number' ? target : target.getBoundingClientRect().top + window.scrollY) - window.scrollY)
+    // recorrido más largo = un poco más de tiempo, entre 1.2 y 2.4 s
+    lenisRef.scrollTo(target, { offset: typeof target === 'number' ? 0 : offset, duration: Math.min(2.4, Math.max(1.2, dist / 1800)), easing: easeInOut })
+  } else {
+    const top = typeof target === 'number' ? target : target.getBoundingClientRect().top + window.scrollY + offset
+    window.scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' })
+  }
+}
 
 const nav = [
   { to: '/', label: 'Inicio', end: true },
@@ -19,7 +35,7 @@ export default function SiteLayout({ ready }: { ready: boolean }) {
   const [solid, setSolid] = useState(false)
   const [open, setOpen] = useState(false)
   const { pathname, hash } = useLocation()
-  const overHero = (pathname === '/' || pathname.startsWith('/proyectos/')) && !solid
+  const overHero = (pathname === '/' || pathname.startsWith('/proyectos') || pathname === '/contacto') && !solid
 
   useMotionValueEvent(scrollY, 'change', (y) => {
     const prev = scrollY.getPrevious() ?? 0
@@ -30,31 +46,40 @@ export default function SiteLayout({ ready }: { ready: boolean }) {
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const lenis = new Lenis({ lerp: 0.1 })
+    lenisRef = lenis
     let id = 0
     const raf = (t: number) => { lenis.raf(t); id = requestAnimationFrame(raf) }
     id = requestAnimationFrame(raf)
-    return () => { cancelAnimationFrame(id); lenis.destroy() }
+    return () => { cancelAnimationFrame(id); lenis.destroy(); lenisRef = null }
   }, [])
 
   const goHash = (h: string) => {
     const el = document.getElementById(h.replace('#', ''))
-    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 70, behavior: 'smooth' })
+    if (el) smoothTo(el)
   }
 
+  // Al llegar a una sección (#servicios, #proceso) se recorre la página de forma suave.
+  // Si venimos de otra página, esperamos a que termine la transición de entrada.
+  const prevPath = useRef(pathname)
   useEffect(() => {
     setOpen(false)
+    const changedPage = prevPath.current !== pathname
+    prevPath.current = pathname
     if (hash && ready) {
-      const t = setTimeout(() => goHash(hash), 120)
+      const t = setTimeout(() => goHash(hash), changedPage ? 900 : 60)
       return () => clearTimeout(t)
     }
   }, [pathname, hash, ready])
 
-  // tocar un enlace de sección cuando ya estás en ella también debe desplazar
+  // tocar un enlace de sección cuando ya estás en ella también debe desplazar; "Inicio" sube suave
   const onNav = (to: string) => {
     setOpen(false)
     const i = to.indexOf('#')
     if (i >= 0 && pathname === '/' && hash === to.slice(i)) goHash(to.slice(i))
+    if (to === '/' && pathname === '/') smoothTo(0)
   }
+
+  const outlet = useOutlet()
 
   return (
     <>
@@ -106,7 +131,12 @@ export default function SiteLayout({ ready }: { ready: boolean }) {
       </motion.header>
 
       <main className={ready ? '' : 'h-svh overflow-hidden'}>
-        <Outlet />
+        {/* Transición entre páginas: la página sale con un fundido y la nueva entra suave */}
+        <AnimatePresence mode="wait" onExitComplete={() => { lenisRef?.scrollTo(0, { immediate: true, force: true }); window.scrollTo(0, 0) }}>
+          <motion.div key={pathname} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.45, ease: 'easeInOut' }}>
+            {outlet}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       <footer className="bg-ink text-paper">

@@ -2,6 +2,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowUpRight, Landmark } from 'lucide-react'
 import { EASE, Reveal, SplitText } from '../components/ui'
+import HeroSlides from '../components/HeroSlides'
 import { img } from '../data/mock'
 import { useStore } from '../store'
 
@@ -20,12 +21,21 @@ export default function Portfolio() {
   const list = f === 'Todos' ? all : all.filter((p) => p.services.includes(f))
 
   return (
-    <div className="pt-32 sm:pt-40">
-      <section className="mx-auto max-w-7xl px-4 sm:px-8">
-        <p className="mb-5 text-xs uppercase tracking-[0.3em] text-muted">Portafolio · {all.length} proyectos publicados</p>
-        <SplitText as="h1" text="Proyectos que ya forman parte de Mérida." className="max-w-4xl font-display text-5xl font-light leading-[1.02] tracking-tight sm:text-7xl" />
+    <div>
+      <section className="relative -mt-9 h-[78svh] min-h-[520px] overflow-hidden bg-ink text-paper">
+        <HeroSlides
+          slides={all.map((p) => ({ photo: p.cover, title: p.name, sub: p.location.split(',')[0], to: `/proyectos/${p.slug}` }))}
+          interval={5500}
+          overlayClass="bg-gradient-to-b from-ink/60 via-ink/30 to-ink/85"
+        />
+        <div className="relative mx-auto flex h-full max-w-7xl flex-col justify-end px-4 pb-20 sm:px-8 sm:pb-24">
+          <p className="mb-5 flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-paper/70"><span className="h-px w-10 bg-clay" /> Portafolio · {all.length} proyectos publicados</p>
+          <SplitText as="h1" text="Proyectos que ya forman parte de Mérida." className="max-w-4xl font-display text-5xl font-light leading-[1.02] tracking-tight sm:text-7xl" />
+        </div>
+      </section>
 
-        <Reveal delay={0.2}>
+      <section id="lista" className="mx-auto max-w-7xl px-4 sm:px-8">
+        <Reveal delay={0.1}>
           <div className="mt-12 flex gap-2 overflow-x-auto pb-2 scrollbar-thin" role="tablist">
             {filters.map((x) => {
               const count = x.k === 'Todos' ? all.length : all.filter((p) => p.services.includes(x.k)).length
